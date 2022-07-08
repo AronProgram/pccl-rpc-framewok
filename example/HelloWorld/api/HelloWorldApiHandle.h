@@ -66,14 +66,8 @@ protected:
 	**/
 	virtual int  doProcessWork(void);
 
-
 private:
-	int          doLogic();
-	std::string  getRemoteAddr(const std::string& account);
-
-
-private:
-	std::string  _account;
+	std::string  _content;
 
 	
 };

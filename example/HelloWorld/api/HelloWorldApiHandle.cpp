@@ -39,7 +39,7 @@ void HelloWorldApiHandle::reset()
 {
 	HelloWorldHttpApiHandler::reset();
 
-	_account = "";
+	_content = "";
 }
 
 
@@ -48,13 +48,13 @@ int  HelloWorldApiHandle::doCheckParams(void)
 
 	Json::Value& json    = const_cast<Json::Value&>( this->getBasePointerRef().getDoc()   );
 	
-	if ( !json.isMember("account_id") ||  !json["account_id"].isString()  )
+	if ( !json.isMember("content") ||  !json["content"].isString()  )
 	{
 		TLOG_ERROR("not account_id" << std::endl );
 		return pccl::STATE_ERROR;
 	}
 
-	_account = json["account_id"].asString();
+	_content = json["content"].asString();
 	
 	return pccl::STATE_SUCCESS;
 }
@@ -64,41 +64,17 @@ int  HelloWorldApiHandle::doProcessWork(void)
 {	
 	int result = pccl::STATE_SUCCESS;
 
-	result = doLogic();	
+	Json::Value data;
+
+	data["flag"] = "HelloWorld";
+	data["text"] = _content;
+
+	this->success(data);
 
 	return result;
 }
 
 
-int 	HelloWorldApiHandle::doLogic()
-{	
-	Json::Value& json    = const_cast<Json::Value&>( this->getBasePointerRef().getDoc()   );
-	std::string& route   = const_cast<std::string&>( this->getBasePointerRef().getRoute() );
-	
-	std::string  remote  = getRemoteAddr(_account);
-	std::string  body    = Json::FastWriter().write(json);
-	std::string  url     = remote + route ;
 
-	TLOG_DEBUG("account:" << _account << ",url:" << url  << std::endl );
-	
-	cpr::Response r = cpr::Post( cpr::Url{url}, cpr::Body{body} );	
-	if ( r.status_code == 200  )
-	{	
-		this->direct( r.text );
-	}
-	else
-	{
-		this->success(r.text);
-	}
-	
-	return pccl::STATE_SUCCESS;
-	
-}
-
-
-std::string  HelloWorldApiHandle::getRemoteAddr(const std::string& account)
-{
-	return "";
-}
 
 
