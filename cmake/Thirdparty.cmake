@@ -113,12 +113,13 @@ if (JSONCPP)
     set(JSONCPP_LIBRARY      "/usr/local/lib/libjsoncpp.a" )
     
     #include_directories(${JSONCPP_INCLUDE_DIRS})
-	
+
+    execute_process(COMMAND mkdir ${THIRDPARTY_PATH}/jsoncpp-Sandbox/jsoncpp/jsoncpp-build )   
 
     if (NOT EXISTS "${THIRDPARTY_PATH}/jsoncpp-Sandbox/jsoncpp/jsoncpp-build/lib/libjsoncpp.a" )
 		
  		ExternalProject_Add(ADD_jsoncpp                
-            CONFIGURE_COMMAND ${CMAKE_COMMAND} ..
+            CONFIGURE_COMMAND ${CMAKE_COMMAND} .. 
             SOURCE_DIR ${THIRDPARTY_PATH}/jsoncpp-Sandbox/jsoncpp/jsoncpp-build
             BUILD_IN_SOURCE 1
             BUILD_COMMAND   make
